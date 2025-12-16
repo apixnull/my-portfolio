@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -8,6 +8,11 @@ import Education from './components/Education'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import './App.css'
+
+// Lazy load BubbleChat to reduce initial bundle size
+const BubbleChat = React.lazy(() => 
+  import('flowise-embed-react').then(module => ({ default: module.BubbleChat }))
+)
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
@@ -45,6 +50,12 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <Suspense fallback={null}>
+        <BubbleChat
+          chatflowid="600282e7-3991-47a1-a612-d5a05393437a"
+          apiHost="https://cloud.flowiseai.com"
+        />
+      </Suspense>
     </div>
   )
 }
